@@ -1,33 +1,54 @@
-# Cancer Mortality Prediction Models
+# Cancer Mortality Rate Prediction
 
-This project implements two predictive models (Linear Regression and Deep Neural Network)
-on the **cancer_reg.csv** dataset.
+**Course**: Deep Learning — Homework 1  
+**Instructor**: Professor Jun Bai  
+**Author**: Iman Jamshidi  
 
-## Requirements
-Install the dependencies:
-```bash
-pip install pandas numpy scikit-learn tensorflow joblib
-```
+## Overview
+
+This project predicts cancer mortality rates (`TARGET_deathRate`) using a dataset of 3,047 U.S. county-level records with 33 socioeconomic and demographic features. A baseline Linear Regression model was compared against multiple Deep Neural Network (DNN) architectures to identify the best-performing approach.
+
+## Dataset
+
+- **Source**: `cancer_reg.csv`
+- **Samples**: 3,047
+- **Features**: 33 input features + 1 label (`TARGET_deathRate`)
+- **Missing values**: handled by mean imputation
+- **Split**: 70% train / 15% validation / 15% test
+
+## Models
+
+| Model | Test R² |
+|---|---|
+| Linear Regression | 0.755 |
+| DNN-16 | 0.788 |
+| DNN-30-8 | 0.852 |
+| DNN-30-16-8 | 0.834 |
+| DNN-30-16-8-4 | 0.807 |
+| **DNN-64-32-16** | **0.877** ✅ |
+
+Best model: **DNN-64-32-16** with Adam optimizer (LR = 0.001)
+
+## Key Findings
+
+- MSE outperformed MAE and Huber loss as the training objective
+- Adam optimizer significantly outperformed SGD
+- Learning rate of 0.01 was optimal for most architectures; 0.001 worked best for DNN-64-32-16
+- Deeper is not always better — DNN-30-16-8-4 underperformed simpler models
 
 ## Files
-- `linear_regression.py` → Train & test Linear Regression model
-- `dnn_model.py` → Train & test Deep Neural Network model
-- `cancer_reg.csv` → Input dataset (must be in the same folder)
 
-## Usage
-### 1. Linear Regression
-Train and test:
+| File | Description |
+|---|---|
+| `SURF1.ipynb` | Main Jupyter notebook with full experiments |
+| `dnn_model.py` | DNN architecture and training code |
+| `linear_regression.py` | Baseline linear regression implementation |
+| `dnn_64_32_16.h5` | Saved best DNN model weights |
+| `linear_regression.pkl` | Saved linear regression model |
+| `cancer_reg.csv` | Dataset |
+| `Homework_report_ImanJamshidi.pdf` | Full written report |
+
+## Requirements
 ```bash
-python linear_regression.py
+pip install tensorflow scikit-learn pandas numpy joblib
 ```
-
-### 2. Deep Neural Network
-Train and test:
-```bash
-python dnn_model.py
-```
-
-## Notes
-- Both scripts save trained models (`linear_regression.pkl` and `dnn_64_32_16.h5`).
-- Each script has a `test_model` function to reload the trained model and make predictions.
-- Ensure that `cancer_reg.csv` is present before running.
